@@ -1,0 +1,371 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Online Train Reservation System | Login</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #102542, #1d6a96);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 420px;
+            background: white;
+            padding: 40px 35px;
+            border-radius: 14px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .logo-icon {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+
+        .logo h1 {
+            color: #102542;
+            font-size: 25px;
+            margin-bottom: 8px;
+        }
+
+        .logo p {
+            color: #777;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #243247;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #ccd3dc;
+            border-radius: 7px;
+            outline: none;
+            font-size: 15px;
+            transition: border 0.3s;
+        }
+
+        .form-group input:focus {
+            border-color: #1d6a96;
+            box-shadow: 0 0 0 2px rgba(29, 106, 150, 0.1);
+        }
+
+        .password-wrapper {
+            position: relative;
+        }
+
+        .password-wrapper input {
+            padding-right: 65px;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            border: none;
+            background: none;
+            color: #1d6a96;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 12px;
+        }
+
+        .login-button {
+            width: 100%;
+            padding: 14px;
+            background: #1d6a96;
+            color: white;
+            border: none;
+            border-radius: 7px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .login-button:hover {
+            background: #102542;
+        }
+
+        .login-button:disabled {
+            background: #8299aa;
+            cursor: not-allowed;
+        }
+
+        #message {
+            text-align: center;
+            margin-top: 18px;
+            font-size: 14px;
+            line-height: 1.5;
+            min-height: 20px;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            color: #888;
+            font-size: 12px;
+        }
+
+        @media (max-width: 480px) {
+            .login-container {
+                padding: 30px 22px;
+            }
+
+            .logo h1 {
+                font-size: 22px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="login-container">
+
+        <div class="logo">
+
+            <div class="logo-icon">🚆</div>
+
+            <h1>Train Reservation System</h1>
+
+            <p>
+                Welcome back! Please sign in to access
+                your reservation dashboard.
+            </p>
+
+        </div>
+
+        <form id="loginForm">
+
+            <div class="form-group">
+
+                <label for="username">Username</label>
+
+                <input
+                    type="text"
+                    id="username"
+                    name="username"
+                    placeholder="Enter your username"
+                    autocomplete="username"
+                    required
+                >
+
+            </div>
+
+            <div class="form-group">
+
+                <label for="password">Password</label>
+
+                <div class="password-wrapper">
+
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="Enter your password"
+                        autocomplete="current-password"
+                        required
+                    >
+
+                    <button
+                        type="button"
+                        class="toggle-password"
+                        id="togglePassword"
+                    >
+                        SHOW
+                    </button>
+
+                </div>
+
+            </div>
+
+            <button
+                type="submit"
+                class="login-button"
+                id="loginButton"
+            >
+                Login
+            </button>
+
+            <p id="message" role="status" aria-live="polite"></p>
+
+        </form>
+
+        <div class="footer">
+
+            <p>Online Train Reservation System</p>
+
+            <p>Secure and convenient train bookings</p>
+
+        </div>
+
+    </div>
+
+    <script>
+
+        const loginForm = document.getElementById("loginForm");
+
+        const usernameInput = document.getElementById("username");
+
+        const passwordInput = document.getElementById("password");
+
+        const loginButton = document.getElementById("loginButton");
+
+        const message = document.getElementById("message");
+
+        const togglePassword = document.getElementById("togglePassword");
+
+
+        // Show or hide password
+        togglePassword.addEventListener("click", function () {
+
+            if (passwordInput.type === "password") {
+
+                passwordInput.type = "text";
+
+                togglePassword.textContent = "HIDE";
+
+            } else {
+
+                passwordInput.type = "password";
+
+                togglePassword.textContent = "SHOW";
+
+            }
+
+        });
+
+
+        // Handle login
+        loginForm.addEventListener("submit", async function (event) {
+
+            event.preventDefault();
+
+            const username = usernameInput.value.trim();
+
+            const password = passwordInput.value;
+
+            if (!username || !password) {
+
+                message.textContent = "Please enter your username and password.";
+
+                message.style.color = "red";
+
+                return;
+
+            }
+
+            loginButton.disabled = true;
+
+            loginButton.textContent = "Signing in...";
+
+            message.textContent = "Checking your login details...";
+
+            message.style.color = "#555";
+
+
+            try {
+
+                const response = await fetch("/api/login", {
+
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded"
+                    },
+
+                    body: new URLSearchParams({
+
+                        username: username,
+
+                        password: password
+
+                    }),
+
+                    credentials: "same-origin"
+
+                });
+
+
+                const result = await response.json();
+
+
+                if (response.ok && result.success) {
+
+                    message.textContent = "Login successful! Redirecting...";
+
+                    message.style.color = "green";
+
+                    window.location.href = "/dashboard";
+
+                    return;
+
+                }
+
+
+                message.textContent = result.message || "Login failed. Please try again.";
+
+                message.style.color = "red";
+
+
+            } catch (error) {
+
+                message.textContent =
+                    "Unable to connect to the server. Please try again.";
+
+                message.style.color = "red";
+
+                console.error("Login error:", error);
+
+            } finally {
+
+                loginButton.disabled = false;
+
+                loginButton.textContent = "Login";
+
+            }
+
+        });
+
+    </script>
+
+</body>
+
+</html>

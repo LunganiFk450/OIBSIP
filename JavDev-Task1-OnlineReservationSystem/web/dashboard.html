@@ -1,0 +1,967 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RailConnect | Dashboard</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Segoe UI", Arial, sans-serif;
+        }
+
+        body {
+            background: #f3f6fb;
+            color: #17243a;
+        }
+
+        header {
+            background: #10243e;
+            color: white;
+            padding: 18px 6%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .brand {
+            font-size: 23px;
+            font-weight: 800;
+            letter-spacing: 1px;
+        }
+
+        .brand span {
+            color: #27c4b8;
+        }
+
+        .logout-btn {
+            background: #e85d65;
+            color: white;
+            border: none;
+            padding: 10px 19px;
+            border-radius: 7px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .logout-btn:hover {
+            background: #c9444d;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1150px;
+            margin: 35px auto;
+        }
+
+        .welcome {
+            margin-bottom: 25px;
+        }
+
+        .welcome h1 {
+            font-size: 28px;
+            margin-bottom: 7px;
+        }
+
+        .welcome p {
+            color: #718096;
+        }
+
+        .navigation {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 25px;
+        }
+
+        .nav-btn {
+            border: 1px solid #dce3ed;
+            background: white;
+            color: #34445c;
+            padding: 12px 22px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .nav-btn.active,
+        .nav-btn:hover {
+            background: #10243e;
+            color: white;
+            border-color: #10243e;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .panel {
+            background: white;
+            padding: 28px;
+            border-radius: 13px;
+            box-shadow: 0 4px 18px rgba(20, 40, 70, 0.06);
+            margin-bottom: 25px;
+        }
+
+        .panel h2 {
+            margin-bottom: 20px;
+            font-size: 21px;
+        }
+
+        .search-grid,
+        .booking-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 18px;
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .field label {
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .field input,
+        .field select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #d6deea;
+            border-radius: 7px;
+            font-size: 14px;
+            outline: none;
+            background: white;
+        }
+
+        .field input:focus,
+        .field select:focus {
+            border-color: #159c98;
+        }
+
+        .primary-btn {
+            background: #119c98;
+            color: white;
+            border: none;
+            padding: 13px 22px;
+            border-radius: 7px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .primary-btn:hover {
+            background: #087f7c;
+        }
+
+        .secondary-btn {
+            background: #10243e;
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 7px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .train-card,
+        .reservation-card {
+            border: 1px solid #e1e7ef;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 15px;
+        }
+
+        .train-card h3,
+        .reservation-card h3 {
+            margin-bottom: 12px;
+            color: #10243e;
+        }
+
+        .train-details {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin: 15px 0;
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        .train-details strong,
+        .reservation-details strong {
+            color: #25364e;
+        }
+
+        .reservation-details {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            font-size: 14px;
+            color: #64748b;
+            margin: 15px 0;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 6px 11px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .confirmed {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .cancelled {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .cancel-btn {
+            background: #dc454f;
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .cancel-btn:hover {
+            background: #b92f39;
+        }
+
+        .message {
+            padding: 13px;
+            border-radius: 7px;
+            margin-top: 15px;
+            display: none;
+            font-size: 14px;
+        }
+
+        .message.success {
+            display: block;
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .message.error {
+            display: block;
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .empty {
+            color: #718096;
+            text-align: center;
+            padding: 25px;
+        }
+
+        .selected-train {
+            background: #e8f8f6;
+            border: 1px solid #b5e5df;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        footer {
+            text-align: center;
+            color: #8793a5;
+            padding: 30px 15px;
+            font-size: 13px;
+        }
+
+        @media (max-width: 650px) {
+            .container {
+                width: 94%;
+                margin-top: 22px;
+            }
+
+            .search-grid,
+            .booking-grid,
+            .train-details,
+            .reservation-details {
+                grid-template-columns: 1fr;
+            }
+
+            .panel {
+                padding: 19px;
+            }
+
+            .welcome h1 {
+                font-size: 23px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <div class="brand">RAIL<span>CONNECT</span></div>
+    <button class="logout-btn" id="logoutBtn">Logout</button>
+</header>
+
+<main class="container">
+
+    <div class="welcome">
+        <h1>Welcome to RailConnect</h1>
+        <p>Manage your train journeys and reservations in one place.</p>
+    </div>
+
+    <nav class="navigation">
+        <button class="nav-btn active" data-section="bookingSection">
+            Book Tickets
+        </button>
+
+        <button class="nav-btn" data-section="reservationsSection">
+            My Reservations
+        </button>
+    </nav>
+
+    <!-- BOOKING SECTION -->
+
+    <section id="bookingSection" class="section active">
+
+        <div class="panel">
+
+            <h2>Find Your Train</h2>
+
+            <form id="searchForm">
+
+                <div class="search-grid">
+
+                    <div class="field">
+                        <label for="source">Departure Station</label>
+                        <input
+                            type="text"
+                            id="source"
+                            placeholder="Enter departure station"
+                            required>
+                    </div>
+
+                    <div class="field">
+                        <label for="destination">Arrival Station</label>
+                        <input
+                            type="text"
+                            id="destination"
+                            placeholder="Enter destination"
+                            required>
+                    </div>
+
+                </div>
+
+                <button class="primary-btn" type="submit">
+                    Search Trains
+                </button>
+
+            </form>
+
+            <div id="searchMessage" class="message"></div>
+
+        </div>
+
+        <div class="panel">
+
+            <h2>Available Trains</h2>
+
+            <div id="trainResults">
+                <p class="empty">
+                    Enter your departure and arrival stations to find trains.
+                </p>
+            </div>
+
+        </div>
+
+        <!-- BOOKING FORM -->
+
+        <div class="panel hidden" id="bookingPanel">
+
+            <h2>Complete Your Reservation</h2>
+
+            <div class="selected-train" id="selectedTrain"></div>
+
+            <form id="bookingForm">
+
+                <div class="booking-grid">
+
+                    <div class="field">
+                        <label for="passengerName">Passenger Full Name</label>
+                        <input
+                            type="text"
+                            id="passengerName"
+                            maxlength="100"
+                            placeholder="Enter passenger name"
+                            required>
+                    </div>
+
+                    <div class="field">
+                        <label for="travelClass">Travel Class</label>
+                        <select id="travelClass" required>
+                            <option value="">Select travel class</option>
+                            <option value="Economy">Economy</option>
+                            <option value="Business">Business</option>
+                            <option value="First Class">First Class</option>
+                        </select>
+                    </div>
+
+                    <div class="field">
+                        <label for="travelDate">Travel Date</label>
+                        <input type="date" id="travelDate" required>
+                    </div>
+
+                </div>
+
+                <button class="primary-btn" type="submit">
+                    Confirm Reservation
+                </button>
+
+                <button class="secondary-btn" type="button" id="clearBooking">
+                    Clear Selection
+                </button>
+
+            </form>
+
+            <div id="bookingMessage" class="message"></div>
+
+        </div>
+
+    </section>
+
+    <!-- RESERVATIONS SECTION -->
+
+    <section id="reservationsSection" class="section">
+
+        <div class="panel">
+
+            <h2>My Reservations</h2>
+
+            <p style="color:#718096; margin-bottom:15px;">
+                View and manage your train bookings.
+            </p>
+
+            <button class="primary-btn" id="refreshReservations">
+                Refresh Reservations
+            </button>
+
+            <div id="reservationResults">
+                <p class="empty">Loading your reservations...</p>
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+<footer>
+    © 2026 RailConnect Online Reservation System.
+    All rights reserved.
+</footer>
+
+<script>
+
+    let selectedTrain = null;
+
+    const today = new Date();
+    const localToday = new Date(
+        today.getTime() - today.getTimezoneOffset() * 60000
+    ).toISOString().split("T")[0];
+
+    document.getElementById("travelDate").min = localToday;
+
+    // HTML ESCAPING
+
+    function escapeHTML(value) {
+        return String(value ?? "").replace(/[&<>"']/g, function (character) {
+            return {
+                "&": "&amp;",
+                "<": "&lt;",
+                ">": "&gt;",
+                '"': "&quot;",
+                "'": "&#039;"
+            }[character];
+        });
+    }
+
+    // DISPLAY MESSAGE
+
+    function showMessage(elementId, message, type) {
+
+        const element = document.getElementById(elementId);
+
+        element.textContent = message;
+        element.className = "message " + type;
+    }
+
+    function clearMessage(elementId) {
+
+        const element = document.getElementById(elementId);
+
+        element.textContent = "";
+        element.className = "message";
+    }
+
+    // NAVIGATION
+
+    document.querySelectorAll(".nav-btn").forEach(button => {
+
+        button.addEventListener("click", () => {
+
+            document.querySelectorAll(".nav-btn").forEach(btn => {
+                btn.classList.remove("active");
+            });
+
+            document.querySelectorAll(".section").forEach(section => {
+                section.classList.remove("active");
+            });
+
+            button.classList.add("active");
+
+            const sectionId = button.dataset.section;
+
+            document.getElementById(sectionId).classList.add("active");
+
+            if (sectionId === "reservationsSection") {
+                loadReservations();
+            }
+        });
+    });
+
+    // SEARCH TRAINS
+
+    document.getElementById("searchForm")
+        .addEventListener("submit", async function(event) {
+
+        event.preventDefault();
+
+        const source = document.getElementById("source").value.trim();
+        const destination = document.getElementById("destination").value.trim();
+
+        const results = document.getElementById("trainResults");
+
+        clearMessage("searchMessage");
+
+        if (!source || !destination) {
+            showMessage("searchMessage", "Please enter both stations.", "error");
+            return;
+        }
+
+        results.innerHTML = '<p class="empty">Searching for trains...</p>';
+
+        document.getElementById("bookingPanel").classList.add("hidden");
+        selectedTrain = null;
+
+        try {
+
+            const response = await fetch(
+                "/api/trains?source=" + encodeURIComponent(source) +
+                "&destination=" + encodeURIComponent(destination)
+            );
+
+            if (response.status === 401) {
+                window.location.href = "/";
+                return;
+            }
+
+            if (!response.ok) {
+                throw new Error("Unable to search for trains.");
+            }
+
+            const trains = await response.json();
+
+            if (!Array.isArray(trains)) {
+                throw new Error("Unexpected train search response.");
+            }
+
+            displayTrains(trains);
+
+        } catch(error) {
+
+            results.innerHTML = "";
+            showMessage("searchMessage", error.message, "error");
+        }
+    });
+
+    // DISPLAY TRAINS
+
+    function displayTrains(trains) {
+
+        const results = document.getElementById("trainResults");
+
+        if (trains.length === 0) {
+
+            results.innerHTML =
+                '<p class="empty">No available trains found for this route.</p>';
+
+            return;
+        }
+
+        results.innerHTML = "";
+
+        trains.forEach(train => {
+
+            const card = document.createElement("div");
+
+            card.className = "train-card";
+
+            card.innerHTML = `
+                <h3>${escapeHTML(train.trainName)}</h3>
+
+                <div class="train-details">
+                    <div><strong>Train Number:</strong> ${escapeHTML(train.trainNumber)}</div>
+                    <div><strong>Available Seats:</strong> ${escapeHTML(train.availableSeats)}</div>
+                    <div><strong>From:</strong> ${escapeHTML(train.source)}</div>
+                    <div><strong>To:</strong> ${escapeHTML(train.destination)}</div>
+                    <div><strong>Departure:</strong> ${escapeHTML(train.departureTime)}</div>
+                    <div><strong>Arrival:</strong> ${escapeHTML(train.arrivalTime)}</div>
+                </div>
+
+                <button class="secondary-btn select-train">
+                    Select Train
+                </button>
+            `;
+
+            card.querySelector(".select-train").addEventListener("click", () => {
+                selectTrain(train);
+            });
+
+            results.appendChild(card);
+        });
+    }
+
+    // SELECT TRAIN
+
+    function selectTrain(train) {
+
+        selectedTrain = train;
+
+        document.getElementById("selectedTrain").innerHTML = `
+            <strong>${escapeHTML(train.trainName)}</strong><br>
+            Train Number: ${escapeHTML(train.trainNumber)}<br>
+            ${escapeHTML(train.source)} → ${escapeHTML(train.destination)}
+        `;
+
+        document.getElementById("bookingPanel").classList.remove("hidden");
+
+        clearMessage("bookingMessage");
+
+        document.getElementById("bookingPanel").scrollIntoView({
+            behavior: "smooth"
+        });
+    }
+
+    // CLEAR BOOKING FORM
+
+    document.getElementById("clearBooking").addEventListener("click", () => {
+
+        selectedTrain = null;
+
+        document.getElementById("bookingForm").reset();
+
+        document.getElementById("bookingPanel").classList.add("hidden");
+
+        clearMessage("bookingMessage");
+    });
+
+    // CREATE RESERVATION
+
+    document.getElementById("bookingForm")
+        .addEventListener("submit", async function(event) {
+
+        event.preventDefault();
+
+        if (!selectedTrain) {
+
+            showMessage(
+                "bookingMessage",
+                "Please select a train first.",
+                "error"
+            );
+
+            return;
+        }
+
+        const passengerName =
+            document.getElementById("passengerName").value.trim();
+
+        const travelClass =
+            document.getElementById("travelClass").value;
+
+        const travelDate =
+            document.getElementById("travelDate").value;
+
+        if (!passengerName || !travelClass || !travelDate) {
+
+            showMessage(
+                "bookingMessage",
+                "Please complete all booking fields.",
+                "error"
+            );
+
+            return;
+        }
+
+        const button = this.querySelector('button[type="submit"]');
+
+        button.disabled = true;
+        button.textContent = "Processing...";
+
+        const bookingData = new URLSearchParams();
+
+        bookingData.append("passengerName", passengerName);
+        bookingData.append("trainNumber", selectedTrain.trainNumber);
+        bookingData.append("travelClass", travelClass);
+        bookingData.append("travelDate", travelDate);
+
+        try {
+
+            const response = await fetch("/api/book", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded"
+                },
+                body: bookingData
+            });
+
+            if (response.status === 401) {
+                window.location.href = "/";
+                return;
+            }
+
+            const result = await response.json();
+
+            if (!response.ok || !result.success) {
+                throw new Error(result.message || "Booking failed.");
+            }
+
+            showMessage(
+                "bookingMessage",
+                "Reservation confirmed! Your PNR is: " + result.pnr,
+                "success"
+            );
+
+            document.getElementById("bookingForm").reset();
+
+            document.getElementById("travelDate").min = localToday;
+
+            // Refresh train availability
+            document.getElementById("searchForm")
+                .dispatchEvent(new Event("submit", { cancelable: true }));
+
+        } catch(error) {
+
+            showMessage("bookingMessage", error.message, "error");
+
+        } finally {
+
+            button.disabled = false;
+            button.textContent = "Confirm Reservation";
+        }
+    });
+
+    // LOAD RESERVATIONS
+
+    async function loadReservations() {
+
+        const container = document.getElementById("reservationResults");
+
+        container.innerHTML =
+            '<p class="empty">Loading your reservations...</p>';
+
+        try {
+
+            const response = await fetch("/api/reservations");
+
+            if (response.status === 401) {
+                window.location.href = "/";
+                return;
+            }
+
+            if (!response.ok) {
+                throw new Error("Unable to load reservations.");
+            }
+
+            const result = await response.json();
+
+            if (!result.success || !Array.isArray(result.reservations)) {
+                throw new Error(result.message || "Invalid reservation response.");
+            }
+
+            displayReservations(result.reservations);
+
+        } catch(error) {
+
+            container.innerHTML =
+                '<p class="empty">' + escapeHTML(error.message) + '</p>';
+        }
+    }
+
+    // DISPLAY RESERVATIONS
+
+    function displayReservations(reservations) {
+
+        const container = document.getElementById("reservationResults");
+
+        if (reservations.length === 0) {
+
+            container.innerHTML =
+                '<p class="empty">You have not made any reservations yet.</p>';
+
+            return;
+        }
+
+        container.innerHTML = "";
+
+        reservations.forEach(reservation => {
+
+            const status = String(reservation.status || "").toUpperCase();
+
+            const isConfirmed = status === "CONFIRMED";
+
+            const card = document.createElement("div");
+
+            card.className = "reservation-card";
+
+            card.innerHTML = `
+                <h3>${escapeHTML(reservation.trainNumber)}</h3>
+
+                <span class="status ${isConfirmed ? "confirmed" : "cancelled"}">
+                    ${escapeHTML(status)}
+                </span>
+
+                <div class="reservation-details">
+                    <div><strong>PNR:</strong> ${escapeHTML(reservation.pnr)}</div>
+                    <div><strong>Passenger:</strong> ${escapeHTML(reservation.passengerName)}</div>
+                    <div><strong>Train Number:</strong> ${escapeHTML(reservation.trainNumber)}</div>
+                    <div><strong>Class:</strong> ${escapeHTML(reservation.travelClass)}</div>
+                    <div><strong>Travel Date:</strong> ${escapeHTML(reservation.travelDate)}</div>
+                    <div><strong>Route:</strong> ${escapeHTML(reservation.source)} → ${escapeHTML(reservation.destination)}</div>
+                    <div><strong>Booking Date:</strong> ${escapeHTML(reservation.bookingDate)}</div>
+                </div>
+
+                ${isConfirmed ? `
+                    <button class="cancel-btn" data-pnr="${escapeHTML(reservation.pnr)}">
+                        Cancel Reservation
+                    </button>
+                ` : ""}
+            `;
+
+            const cancelButton = card.querySelector(".cancel-btn");
+
+            if (cancelButton) {
+
+                cancelButton.addEventListener("click", () => {
+                    cancelReservation(reservation.pnr);
+                });
+            }
+
+            container.appendChild(card);
+        });
+    }
+
+    // CANCEL RESERVATION
+
+    async function cancelReservation(pnr) {
+
+        const confirmed = confirm(
+            "Are you sure you want to cancel reservation " + pnr + "?"
+        );
+
+        if (!confirmed) {
+            return;
+        }
+
+        const data = new URLSearchParams();
+
+        data.append("pnr", pnr);
+
+        try {
+
+            const response = await fetch("/api/cancel", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded"
+                },
+                body: data
+            });
+
+            if (response.status === 401) {
+                window.location.href = "/";
+                return;
+            }
+
+            const result = await response.json();
+
+            if (!response.ok || !result.success) {
+                throw new Error(result.message || "Cancellation failed.");
+            }
+
+            alert("Reservation cancelled successfully.");
+
+            loadReservations();
+
+        } catch(error) {
+
+            alert(error.message);
+        }
+    }
+
+    // REFRESH RESERVATIONS
+
+    document.getElementById("refreshReservations")
+        .addEventListener("click", loadReservations);
+
+    // LOGOUT
+
+    document.getElementById("logoutBtn")
+        .addEventListener("click", async () => {
+
+        const confirmed = confirm("Are you sure you want to log out?");
+
+        if (!confirmed) {
+            return;
+        }
+
+        try {
+
+            const response = await fetch("/api/logout", {
+                method: "POST"
+            });
+
+            if (!response.ok) {
+                throw new Error("Unable to log out. Please try again.");
+            }
+
+            window.location.replace("/");
+
+        } catch(error) {
+
+            alert(error.message);
+        }
+    });
+
+</script>
+
+</body>
+</html>
